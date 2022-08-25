@@ -38,14 +38,14 @@ Métodos | Definição
 ##### __EXEMPLO:__ 11123444455555555556666666666666666666666666
 ---
 
-Bloco | Posições | Definição
---- | --- | ---
-__1__ | **0 a 2**  | `Código do Banco na Câmara de Compensação`
-__2__ | **3 a 3**  | `Código da Moeda = 9 (Real)`
-__3__ | **4 a 4**  | `Digito Verificador (DV) do código de Barras`
-__4__ | **5 a 8**  | `Fator de Vencimento`
-__5__ | **9 a 18**  | `Valor com 2 casas de centavos`
-__6__ | **19 a 43**  | `Campo Livre (De uso da instituição bancária)`
+| Bloco |   Posições  |                   Definição                   |
+|-------|-------------|-----------------------------------------------|
+| __1__ | **0 a 2**   | `Código do Banco na Câmara de Compensação`    |
+| __2__ | **3 a 3**   | `Código da Moeda = 9 (Real)`                  |
+| __3__ | **4 a 4**   | `Digito Verificador (DV) do código de Barras` |
+| __4__ | **5 a 8**   | `Fator de Vencimento`                         |
+| __5__ | **9 a 18**  | `Valor com 2 casas de centavos`               |
+| __6__ | **19 a 43** | `Campo Livre (De uso da instituição bancária)`|
 
 ---
 #### 4.1.2 __TIPO:__ LINHA DIGITÁVEL (47 POSIÇÕES NUMÉRICAS)
@@ -53,19 +53,19 @@ __6__ | **19 a 43**  | `Campo Livre (De uso da instituição bancária)`
 ##### __EXEMPLO__: AAABC.CCCCX DDDDD.DDDDDY EEEEE.EEEEEZ K UUUUVVVVVVVVVV
 ---
 
-Campo | Posições linha dig. | Definição
---- | --- | ---
-__A__ | **0 a 2** (0 a 2 do cód. barras)  | `Código do Banco na Câmara de compensação`
-__B__ | **3 a 3** (3 a 3 do cód. barras)  | `Código da moeda`
-__C__ | **4 a 8** (19 a 23 do cód. barras)  | `Campo Livre`
-__X__ | **9 a 9**  | `Dígito verificador do Bloco 1 (Módulo 10)`
-__D__ | **10 a 19** (24 a 33 do cód. barras)  | `Campo Livre`
-__Y__ | **20 a 20**  | `Dígito verificador do Bloco 2 (Módulo 10)`
-__E__ | **21 a 30** (24 a 43 do cód. barras)  | `Campo Livre`
-__Z__ | **31 a 31**  | `Dígito verificador do Bloco 3 (Módulo 10)`
-__K__ | **32 a 32** (4 a 4 do cód. barras)  | `Dígito verificador do código de barras`
-__U__ | **33 a 36** (5 a 8 do cód. barras)  | `Fator de Vencimento`
-__V__ | **37 a 43** (9 a 18 do cód. barras)  | `Valor`
+| Campo |         Posições linha dig.         |                   Definição                |
+|-------|-------------------------------------|--------------------------------------------|
+| __A__ | **0 a 2** (0 a 2 do cód. barras)    | `Código do Banco na Câmara de compensação` |
+| __B__ | **3 a 3** (3 a 3 do cód. barras)    | `Código da moeda`                          |
+| __C__ | **4 a 8** (19 a 23 do cód. barras)  | `Campo Livre`                              |
+| __X__ | **9 a 9**                           | `Dígito verificador do Bloco 1 (Módulo 10)`|
+| __D__ | **10 a 19** (24 a 33 do cód. barras)| `Campo Livre`                              |
+| __Y__ | **20 a 20**                         | `Dígito verificador do Bloco 2 (Módulo 10)`|
+| __E__ | **21 a 30** (24 a 43 do cód. barras)| `Campo Livre`                              |
+| __Z__ | **31 a 31**                         | `Dígito verificador do Bloco 3 (Módulo 10)`|
+| __K__ | **32 a 32** (4 a 4 do cód. barras)  | `Dígito verificador do código de barras`   |
+| __U__ | **33 a 36** (5 a 8 do cód. barras)  | `Fator de Vencimento`                      |
+| __V__ | **37 a 43** (9 a 18 do cód. barras) | `Valor`                                    |
 ---
 ### 4.2 __`CONTA CONVÊNIO / ARRECADAÇÃO`__
 
@@ -73,30 +73,31 @@ __V__ | **37 a 43** (9 a 18 do cód. barras)  | `Valor`
 
 ##### __EXEMPLO__: 12345555555555566667777777777777777777777777
 ---
-Campo | Posições | Definição
---- | --- | ---
-__1__ | **0 a 0**  | `"8" Identificação da Arrecadação/convênio`
-__2__ | **1 a 1**  | `Identificação do segmento`
-__3__ | **2 a 2**  | `Identificação do valor real ou referência`
-__4__ | **3 a 3**  | `Dígito verificador geral (módulo 10 ou 11)`
-__5__ | **4 a 14**  | `Valor efetivo ou valor referência`
-__6__ | **15 a 18**  | `Identificação da empresa/órgão`
-__7__ | **19 a 43**  | `Campo livre de utilização da empresa/órgão`
+| Campo |   Posições   |                   Definição                 |
+|-------|--------------|---------------------------------------------|
+| __1__ | **0 a 0**    | `"8" Identificação da Arrecadação/convênio` |
+| __2__ | **1 a 1**    | `Identificação do segmento`                 |
+| __3__ | **2 a 2**    | `Identificação do valor real ou referência` |
+| __4__ | **3 a 3**    | `Dígito verificador geral (módulo 10 ou 11)`|
+| __5__ | **4 a 14**   | `Valor efetivo ou valor referência`         |
+| __6__ | **15 a 18**  | `Identificação da empresa/órgão`            |
+| __7__ | **19 a 43**  | `Campo livre de utilização da empresa/órgão`|
 ---
 #### 4.2.2 __TIPO:__ LINHA DIGITÁVEL (48 POSIÇÕES NUMÉRICAS)
 
 ##### __EXEMPLO__: ABCDEEEEEEE-W EEEEFFFFGGG-X GGGGGGGGGGG-Y GGGGGGGGGGG-Z
 ---
-Campo | Posições | Definição
---- | --- | ---
-__A__ | **0 a 0**  | `"8" Identificação da Arrecadação/convênio`
-__B__ | **1 a 1**  | `Identificação do segmento`
-__C__ | **2 a 2**  | `Identificação do valor real ou referência`
-__D__ | **3 a 3**  | `Dígito verificador geral (módulo 10 ou 11)`
-__E__ | **4 a 14**  | `Valor efetivo ou valor referência`
-__W__ | **11 a 11**  | `Dígito verificador do Bloco 1`
-__F__ | **15 a 18**  | `Identificação da empresa/órgão`
-__G__ | **19 a 43**  | `Campo livre de utilização da empresa/órgão`
-__X__ | **23 a 23**  | `Dígito verificador do Bloco 2`
-__Y__ | **35 a 35**  | `Dígito verificador do Bloco 3`
-__Z__ | **47 a 47**  | `Dígito verificador do Bloco 4`
+| Campo |   Posições   |                   Definição                 |
+|-------|--------------|---------------------------------------------|
+| __A__ | **0 a 0**    | `"8" Identificação da Arrecadação/convênio` |
+| __B__ | **1 a 1**    | `Identificação do segmento`                 |
+| __C__ | **2 a 2**    | `Identificação do valor real ou referência` |
+| __D__ | **3 a 3**    | `Dígito verificador geral (módulo 10 ou 11)`|
+| __E__ | **4 a 14**   | `Valor efetivo ou valor referência`         |
+| __W__ | **11 a 11**  | `Dígito verificador do Bloco 1`             |
+| __F__ | **15 a 18**  | `Identificação da empresa/órgão`            |
+| __G__ | **19 a 43**  | `Campo livre de utilização da empresa/órgão`|
+| __X__ | **23 a 23**  | `Dígito verificador do Bloco 2`             |
+| __Y__ | **35 a 35**  | `Dígito verificador do Bloco 3`             |
+| __Z__ | **47 a 47**  | `Dígito verificador do Bloco 4`             |
+---
