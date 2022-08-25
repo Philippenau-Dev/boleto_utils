@@ -18,27 +18,27 @@ class BoletoUtils {
     }
   }
 
-  TipoBoleto? identificarTipoBoleto(String barcode) {
-    barcode = barcode.numericOnly;
+  TipoBoleto? identificarTipoBoleto(String codigo) {
+    codigo = codigo.numericOnly;
 
-    if (barcode.split('').reversed.join().substring(14) == '00000000000000' ||
-        barcode.substring(5, 19) == '00000000000000') {
+    if (codigo.split('').reversed.join().substring(14) == '00000000000000' ||
+        codigo.substring(5, 19) == '00000000000000') {
       return TipoBoleto.cartaoDeCredito;
-    } else if (barcode.substring(0, 1) == '8') {
-      if (barcode.substring(1, 1) == '1') {
+    } else if (codigo.substring(0, 1) == '8') {
+      if (codigo.substring(1, 1) == '1') {
         return TipoBoleto.arrecadacaoPrefeitura;
-      } else if (barcode.substring(1, 2) == '2') {
+      } else if (codigo.substring(1, 2) == '2') {
         return TipoBoleto.convenioSaneamento;
-      } else if (barcode.substring(1, 2) == '3') {
+      } else if (codigo.substring(1, 2) == '3') {
         return TipoBoleto.convenioEnergiaEletricaGas;
-      } else if (barcode.substring(1, 2) == '4') {
+      } else if (codigo.substring(1, 2) == '4') {
         return TipoBoleto.convenioTelecomunicacao;
-      } else if (barcode.substring(1, 2) == '5') {
+      } else if (codigo.substring(1, 2) == '5') {
         return TipoBoleto.arrecadacaoOrgaosGovernamentais;
-      } else if (barcode.substring(1, 2) == '6' ||
-          barcode.substring(1, 2) == '9') {
+      } else if (codigo.substring(1, 2) == '6' ||
+          codigo.substring(1, 2) == '9') {
         return TipoBoleto.outros;
-      } else if (barcode.substring(1, 2) == '7') {
+      } else if (codigo.substring(1, 2) == '7') {
         return TipoBoleto.arrecadacaoTaxasDeTransito;
       }
     } else {
@@ -275,7 +275,7 @@ class BoletoUtils {
     return boletoValidado;
   }
 
-  calculaDVCodBarras({
+  String calculaDVCodBarras({
     required String codigo,
     required int posicaoCodigo,
     required int mod,
@@ -288,7 +288,7 @@ class BoletoUtils {
 
     if (mod == 10) {
       return calculaMod10(codigo);
-    } else if (mod == 11) {
+    } else {
       return calculaMod11(codigo);
     }
   }
@@ -430,31 +430,6 @@ class BoletoUtils {
     }
     return soma.toString();
   }
-
-  // String calculaMod11(String numero) {
-  //   final sequencia = [4, 3, 2, 9, 8, 7, 6, 5];
-  //   int digito = 0;
-  //   int j = 0;
-  //   int dac = 0;
-
-  //   for (var i = 0; i < numero.length; i++) {
-  //     final mult = sequencia[j];
-  //     j++;
-  //     j %= sequencia.length;
-  //     digito += mult * int.parse(numero[i]);
-  //   }
-
-  //   dac = digito % 11;
-
-  //   if (dac == 0 || dac == 1) {
-  //     return 0.toString();
-  //   }
-  //   if (dac == 10) {
-  //     return 1.toString();
-  //   }
-
-  //   return (11 - dac).toString();
-  // }
 
   String calculaMod11(String numero) {
     final numeroReverso = numero.split('').reversed.join();
