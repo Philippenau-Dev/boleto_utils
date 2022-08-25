@@ -1,6 +1,6 @@
 name: boleto_utils
-description: A new Flutter package project.
-version: 0.0.1
+description: Package com métodos para a validação de todos os tipos de boleto
+version: 1.0.0
 homepage: https://github.com/Philippenau-Dev/boleto_utils
 
 environment:
