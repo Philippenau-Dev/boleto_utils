@@ -1,5 +1,7 @@
+## 1.0.0+2
+* Change tables README
 ## 1.0.0+1
-* Update README
+* Change README
 ## 1.0.0
 
-* Primeira release
+* First release
