@@ -1,3 +1,4 @@
+///Classe com atributos de referência do boleto
 class Referencia {
   final int mod;
   final bool efetivo;

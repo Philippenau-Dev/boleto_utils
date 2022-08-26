@@ -1,6 +1,7 @@
 import 'package:boleto_utils/src/types/tipo_boleto.dart';
 import 'package:boleto_utils/src/types/tipo_codigo.dart';
 
+///Classe com atributos do boleto
 class BoletoValidado {
   final bool? sucesso;
   final String? codigoInput;
