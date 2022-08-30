@@ -109,7 +109,8 @@ class InfosBoleto extends StatelessWidget {
                 'Código de barras:\n ${boletoValidado?.codigoBarras}\n'),
             SelectableText(
                 'Linha digitável:\n${boletoValidado?.linhaDigitavel}\n'),
-            SelectableText('Banco emissor: ${boletoValidado?.bancoEmissor}\n'),
+            SelectableText(
+                'Código banco emissor: ${boletoValidado?.bancoEmissor?.codigo}\n'),
             SelectableText('Vencimento: ${boletoValidado?.vencimento}\n'),
             SelectableText('Valor: ${boletoValidado?.valor}\n'),
           ],
