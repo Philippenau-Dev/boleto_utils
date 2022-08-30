@@ -4,14 +4,15 @@
 
 ###  1. Recursos
 - [x] Validar boleto
+- [x] Identificar banco emissor do boleto
 - [x] Código de barras para linha digitável
 - [x] Linha digitável para código de barras
 - [x] Identificar tipo de boleto
 - [x] Identificar tipo de código
-- [x] Identificar data de vencimento
 - [x] Identificar valor do boleto
-- [x] Cálculo digito verrificador módulo 10
-- [x] Cálculo digito verrificador módulo 11
+- [x] Identificar data de vencimento
+- [x] Cálculo digito verificador módulo 10
+- [x] Cálculo digito verificador módulo 11
 ## 2. Métodos
 Métodos | Definição
 --- | ---
@@ -26,7 +27,7 @@ Métodos | Definição
 `String calculaMod10(String numero)` | Realiza o cálculo Módulo 10 do número inserido.
 `String calculaMod11(String numero)` | Realiza o cálculo Módulo 11 do número inserido.
 `BoletoValidado validarBoleto(String codigo)` | Verifica a numeração e utiliza várias das funções acima para retornar um BoletoValidado contendo informações sobre a numeração inserida: `Tipo de código inserido`, `Tipo de boleto inserido`, `Código de barras`, `Linha digitável`, `Vencimento` e `Valor`.
-`String? identificarBancoEmissor(String codigo)` | Verifica a numeração e retorna o número do banco emissor.
+`BancoEmissor identificarBancoEmissor(String codigo)` | Verifica a numeração dos três primeiros digitos e retorna o BancoEmissor com número, nome do banco, ISPB, PDF com lista atualizada diariamente pelo Banco Central.
 
 ## 3. Regras de numeração dos boletos
 ---
@@ -37,7 +38,7 @@ Métodos | Definição
 
 ##### __EXEMPLO:__ 11123444455555555556666666666666666666666666
 ---
-<table border ='1'>
+<table>
     <tr>
         <td>Bloco</td>
         <td>Posições</td>
@@ -83,7 +84,7 @@ Métodos | Definição
 
 ##### __EXEMPLO:__ 11123444455555555556666666666666666666666666
 ---
-<table border ='1'>
+<table>
     <tr>
         <td>Campo</td>
         <td>Posições linha dig</td>
@@ -154,7 +155,7 @@ Métodos | Definição
 ##### __EXEMPLO__: 12345555555555566667777777777777777777777777
 ---
 
-<table border ='1'>
+<table>
     <tr>
         <td>Bloco</td>
         <td>Posições</td>
@@ -202,7 +203,7 @@ Métodos | Definição
 ---
 ##### __EXEMPLO__: ABCDEEEEEEE-W EEEEFFFFGGG-X GGGGGGGGGGG-Y GGGGGGGGGGG-Z
 ---
-<table border ='1'>
+<table>
     <tr>
         <td>Campo</td>
         <td>Posições</td>

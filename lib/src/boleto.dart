@@ -1,5 +1,8 @@
+import 'package:boleto_utils/src/constants/lista_bancos.dart';
 import 'package:boleto_utils/src/entities/boleto_validado.dart';
+import 'package:boleto_utils/src/entities/banco_emissor.dart';
 import 'package:boleto_utils/src/entities/referencia.dart';
+import 'package:boleto_utils/src/extensions/first_where_or_empty.dart';
 import 'package:boleto_utils/src/extensions/numeric_only.dart';
 import 'package:boleto_utils/src/types/tipo_codigo.dart';
 
@@ -421,16 +424,19 @@ class BoletoUtils {
     return double.parse(valor);
   }
 
-  String? identificarBancoEmissor(String codigo) {
-    ///Verifica a numeração e retorna o número do banco emissor.
+  BancoEmissor identificarBancoEmissor(String codigo) {
+    ///Verifica a numeração os três primeiros digitos e retorna o BancoEmissor com número, nome do banco, ISPB, PDF com lista atualizada diariamente pelo Banco Central.
     codigo = codigo.numericOnly;
-    String? numeroBancoEmissor;
-    final tipoBoleto = identificarTipoBoleto(codigo);
-    if (tipoBoleto == TipoBoleto.banco) {
+    String numeroBancoEmissor = '000';
+    BancoEmissor? bancoEmissor;
+    final tipoCodigo = identificarTipoCodigo(codigo);
+    if (tipoCodigo != TipoCodigo.invalido) {
       numeroBancoEmissor = codigo.substring(0, 3);
+      bancoEmissor = kListaBancos.firstWhereOrEmpty(
+        numeroBancoEmissor,
+      ); //Percorre a Lista e retorna o primeiro BancoEmissor com o mesmo código identificado, caso não encontre retorna um BancoEmissor vazio
     }
-
-    return numeroBancoEmissor;
+    return bancoEmissor ?? BancoEmissor.empty();
   }
 
   String calculaMod10(String numero) {

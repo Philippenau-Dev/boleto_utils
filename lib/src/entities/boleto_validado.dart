@@ -1,3 +1,4 @@
+import 'package:boleto_utils/src/entities/banco_emissor.dart';
 import 'package:boleto_utils/src/types/tipo_boleto.dart';
 import 'package:boleto_utils/src/types/tipo_codigo.dart';
 
@@ -10,7 +11,7 @@ class BoletoValidado {
   final TipoBoleto? tipoBoleto;
   final String? codigoBarras;
   final String? linhaDigitavel;
-  final String? bancoEmissor;
+  final BancoEmissor? bancoEmissor;
 
   final DateTime? vencimento;
   final double? valor;

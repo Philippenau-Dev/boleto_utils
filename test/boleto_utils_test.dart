@@ -32,11 +32,18 @@ void main() {
           expect(result.mensagem, equals('Boleto válido'));
           expect(result.tipoCodigoInput, TipoCodigo.codigoDeBarras);
           expect(result.tipoBoleto, TipoBoleto.banco);
-          expect(result.codigoBarras,
-              equals('42291865100001983447115000001722714263149812'));
-          expect(result.linhaDigitavel,
-              equals('42297115040000172271942631498120186510000198344'));
-          expect(result.bancoEmissor, equals('422'));
+          expect(
+            result.codigoBarras,
+            equals('42291865100001983447115000001722714263149812'),
+          );
+          expect(
+            result.linhaDigitavel,
+            equals('42297115040000172271942631498120186510000198344'),
+          );
+          expect(
+            result.bancoEmissor?.codigo,
+            equals('422'),
+          );
 
           expect(result.vencimento, DateTime.parse('2021-06-14T20:54:59.000Z'));
           expect(result.valor, equals(1983.44));
@@ -50,12 +57,22 @@ void main() {
           expect(result.mensagem, equals('Boleto válido'));
           expect(result.tipoCodigoInput, TipoCodigo.linhaDigitavel);
           expect(result.tipoBoleto, TipoBoleto.banco);
-          expect(result.codigoBarras,
-              equals('10499898100000214032006561000100040099726390'));
-          expect(result.linhaDigitavel,
-              equals('10492006506100010004200997263900989810000021403'));
-          expect(result.bancoEmissor, equals('104'));
-          expect(result.vencimento, DateTime.parse('2022-05-10T20:54:59.000Z'));
+          expect(
+            result.codigoBarras,
+            equals('10499898100000214032006561000100040099726390'),
+          );
+          expect(
+            result.linhaDigitavel,
+            equals('10492006506100010004200997263900989810000021403'),
+          );
+          expect(
+            result.bancoEmissor?.codigo,
+            equals('104'),
+          );
+          expect(
+            result.vencimento,
+            DateTime.parse('2022-05-10T20:54:59.000Z'),
+          );
           expect(result.valor, equals(214.03));
         });
       });
