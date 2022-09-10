@@ -26,7 +26,7 @@ Métodos | Definição
 `bool validarCodigoComDV({required String codigo, required TipoCodigo tipoCodigo})` | Calcula o dígito verificador de toda a numeração do código de barras. Retorno `true` para numeração válida e `false` para inválida.
 `String calculaMod10(String numero)` | Realiza o cálculo Módulo 10 do número inserido.
 `String calculaMod11(String numero)` | Realiza o cálculo Módulo 11 do número inserido.
-`BoletoValidado validarBoleto(String codigo)` | Verifica a numeração e utiliza várias das funções acima para retornar um BoletoValidado contendo informações sobre a numeração inserida: `Tipo de código inserido`, `Tipo de boleto inserido`, `Código de barras`, `Linha digitável`, `Vencimento` e `Valor`.
+`BoletoValidado validarBoleto(String codigo, {bool formatada = false})` | Verifica a numeração e utiliza várias das funções acima para retornar um BoletoValidado contendo informações sobre a numeração inserida: `Tipo de código inserido`, `Tipo de boleto inserido`, `Código de barras`, `Linha digitável`, `Vencimento` e `Valor`.
 `BancoEmissor identificarBancoEmissor(String codigo)` | Verifica a numeração dos três primeiros digitos e retorna o BancoEmissor com número, nome do banco, ISPB, PDF com lista atualizada diariamente pelo Banco Central.
 
 ## 3. Regras de numeração dos boletos

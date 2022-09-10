@@ -1,5 +1,5 @@
+/// Uma classe que representa um banco emissor.
 class BancoEmissor {
-  ///Classe com atributos do banco emissor
   final String codigo;
   final String? banco;
   final String? ispb;

@@ -2,7 +2,7 @@ import 'package:boleto_utils/src/entities/banco_emissor.dart';
 import 'package:boleto_utils/src/types/tipo_boleto.dart';
 import 'package:boleto_utils/src/types/tipo_codigo.dart';
 
-///Classe com atributos do boleto
+/// Uma classe que representa o resultado de uma validação de boleto.
 class BoletoValidado {
   final bool? sucesso;
   final String? codigoInput;
