@@ -1,3 +1,5 @@
+## 1.0.3
+* Fix modulo11
 ## 1.0.2
 * Improved documentation
 * Added parameter to return a typed line format in the method validateBoleto()

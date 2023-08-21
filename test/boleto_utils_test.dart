@@ -27,26 +27,26 @@ void main() {
       group('Código de barras \n', () {
         test('deve retornar BoletoValidado com informações do boleto \n', () {
           final result = boleto
-              .validarBoleto('42291865100001983447115000001722714263149812');
+              .validarBoleto('32090074201080049084849760000023994480000071327');
           expect(result.sucesso, true);
           expect(result.mensagem, equals('Boleto válido'));
-          expect(result.tipoCodigoInput, TipoCodigo.codigoDeBarras);
+          expect(result.tipoCodigoInput, TipoCodigo.linhaDigitavel);
           expect(result.tipoBoleto, TipoBoleto.banco);
           expect(
             result.codigoBarras,
-            equals('42291865100001983447115000001722714263149812'),
+            equals('32099944800000713270074210800490844976000002'),
           );
           expect(
             result.linhaDigitavel,
-            equals('42297115040000172271942631498120186510000198344'),
+            equals('32090074201080049084849760000023994480000071327'),
           );
           expect(
             result.bancoEmissor?.codigo,
-            equals('422'),
+            equals('320'),
           );
 
-          expect(result.vencimento, DateTime.parse('2021-06-14T20:54:59.000Z'));
-          expect(result.valor, equals(1983.44));
+          expect(result.vencimento, DateTime.parse('2023-08-20 20:54:59.000Z'));
+          expect(result.valor, equals(713.27));
         });
       });
       group('Linha Digitável', () {

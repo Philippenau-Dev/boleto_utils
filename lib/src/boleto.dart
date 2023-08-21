@@ -528,26 +528,28 @@ class BoletoUtils {
     int soma = 0;
     int peso = 2;
     int base = 9;
-    String digito = '';
+    late int digito;
 
     for (int i = 0; i < numeroReverso.length; i++) {
       String c = numeroReverso[i];
 
-      soma += int.parse(c) * peso;
+      soma += (int.parse(c)) * peso;
       if (peso < base) {
         peso++;
       } else {
         peso = 2;
       }
     }
-    digito = (soma % 11).toString();
+    digito = soma % 11;
 
-    if (int.parse(digito) < 2) {
-      digito = '1';
-    } else if (int.parse(digito) >= 2) {
-      digito = (11 - int.parse(digito)).toString();
+    if (digito < 2) {
+      digito = 0;
+    } else if (digito == 10) {
+      digito = 1;
+    } else if (digito >= 2) {
+      digito = 11 - digito;
     }
 
-    return digito;
+    return digito.toString();
   }
 }
