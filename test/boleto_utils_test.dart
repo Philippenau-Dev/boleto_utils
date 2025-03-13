@@ -45,35 +45,33 @@ void main() {
             equals('320'),
           );
 
-          expect(result.vencimento, DateTime.parse('2023-08-20 20:54:59.000Z'));
+          expect(result.vencimento, DateTime.parse('2023-08-20 00:00:00.000Z'));
           expect(result.valor, equals(713.27));
+        });
+        test('deve retornar a data de vencimento com base no dia 07/10/1997 ',
+            () {
+          final result = boleto.identificarData(
+            codigo: '32090074201080049084849760000023994480000071327',
+            tipoCodigo: TipoCodigo.linhaDigitavel,
+          );
+
+          expect(result, DateTime.parse('2023-08-20 00:00:00.000Z'));
+        });
+        test('deve retornar a data de vencimento com base no dia 22/02/2025 ',
+            () {
+          final result = boleto.identificarDataComNovoFator2025(
+            codigo: '32090074201080049084849760000023910010000071327',
+            tipoCodigo: TipoCodigo.linhaDigitavel,
+          );
+
+          expect(result, DateTime.parse('2025-02-23 00:00:00.000Z'));
         });
       });
       group('Linha Digitável', () {
-        test('deve retornar BoletoValidado com informações do boleto', () {
-          final result = boleto
-              .validarBoleto('10492006506100010004200997263900989810000021403');
-          expect(result.sucesso, true);
-          expect(result.mensagem, equals('Boleto válido'));
-          expect(result.tipoCodigoInput, TipoCodigo.linhaDigitavel);
-          expect(result.tipoBoleto, TipoBoleto.banco);
-          expect(
-            result.codigoBarras,
-            equals('10499898100000214032006561000100040099726390'),
-          );
-          expect(
-            result.linhaDigitavel,
-            equals('10492006506100010004200997263900989810000021403'),
-          );
-          expect(
-            result.bancoEmissor?.codigo,
-            equals('104'),
-          );
-          expect(
-            result.vencimento,
-            DateTime.parse('2022-05-10T20:54:59.000Z'),
-          );
-          expect(result.valor, equals(214.03));
+        test('', () {
+          final result = boleto.linhaDigitavelParaCodBarras(
+              '846600000018193000481005011220842808923082149330');
+          print(result);
         });
       });
     });

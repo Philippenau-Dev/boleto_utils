@@ -1,3 +1,5 @@
+## 1.1.0
+* Atualizado para ser compatível com o novo fator de vencimento implementado em 22/02/2025 definido pela FEBRABAN (identificarDataComNovoFator2025())
 ## 1.0.3
 * Fix modulo11
 ## 1.0.2

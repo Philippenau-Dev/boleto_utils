@@ -12,8 +12,8 @@ class BoletoValidado {
   final String? codigoBarras;
   final String? linhaDigitavel;
   final BancoEmissor? bancoEmissor;
-
   final DateTime? vencimento;
+  final DateTime? vencimentoFator2025;
   final double? valor;
 
   BoletoValidado({
@@ -26,6 +26,7 @@ class BoletoValidado {
     this.linhaDigitavel,
     this.bancoEmissor,
     this.vencimento,
+    this.vencimentoFator2025,
     this.valor,
   });
 }

@@ -204,17 +204,81 @@ class BoletoUtils {
     return resultado;
   }
 
+  /// Calcula a data de vencimento de um boleto bancário.
+  ///
+  /// Esta função determina a data de vencimento de um boleto com base no código fornecido
+  /// e no tipo de código especificado. Utiliza um fator de vencimento associado ao código
+  /// e uma data base fixada em 7 de outubro de 1997.
+  ///
+  /// [Parâmetros]:
+  /// - [codigo]: Uma string representando o código do boleto, que pode estar formatado ou não.
+  /// - [tipoCodigo]: O tipo de código utilizado no boleto, especificado pela enumeração [TipoCodigo].
+  ///
+  /// [Retorna]:
+  /// - Uma instância de [DateTime] representando a data de vencimento calculada.
   DateTime identificarData({
     required String codigo,
     required TipoCodigo tipoCodigo,
   }) {
-    ///Verifica a numeração, o tipo de código inserido e o tipo de boleto e retorna a data de vencimento.
-    ///Requer numeração completa (com ou sem formatação) e tipo de código que está sendo inserido (TipoCodigo.codigoDeBarra ou TipoCodigo.linhaDigitavel).
     codigo = codigo.numericOnly;
-    final tipoBoleto = identificarTipoBoleto(codigo);
+    final DateTime dataBase = DateTime.utc(1997, 10, 07, 00, 00, 00);
+    final TipoBoleto? tipoBoleto = identificarTipoBoleto(codigo);
 
+    final int fatorData = obtemFatorData(tipoCodigo, tipoBoleto, codigo);
+
+    return dataBase.add(Duration(days: fatorData));
+  }
+
+  /// Calcula a data de vencimento do boleto com base no código fornecido e no tipo de código.
+  ///
+  /// Esta função determina a data de vencimento de um boleto utilizando o fator de vencimento
+  /// definido a partir de 22/02/2025. O fator de vencimento é um número que representa a quantidade
+  /// de dias decorridos desde uma data base até a data de vencimento do boleto.
+  ///
+  /// A função requer:
+  /// - Um código de boleto completo (com ou sem formatação).
+  /// - Especificação do tipo de código utilizado: [TipoCodigo.codigoDeBarras] ou [TipoCodigo.linhaDigitavel].
+  ///
+  /// [Parâmetros]:
+  /// - [codigo]: Código do boleto, podendo estar formatado ou não.
+  /// - [tipoCodigo]: Tipo de código utilizado no boleto (Código de Barras ou Linha Digitável).
+  ///
+  /// [Retorna]:
+  /// - [DateTime]: Data de vencimento calculada a partir do fator de vencimento.
+  DateTime identificarDataComNovoFator2025({
+    required String codigo,
+    required TipoCodigo tipoCodigo,
+  }) {
+    codigo = codigo.numericOnly;
+    final DateTime dataBase = DateTime.utc(2025, 2, 22, 00, 00, 00);
+    final TipoBoleto? tipoBoleto = identificarTipoBoleto(codigo);
+
+    final int fatorData = obtemFatorData(tipoCodigo, tipoBoleto, codigo);
+
+    return dataBase.add(Duration(days: fatorData - 1000));
+  }
+
+  /// Retorna o fator de vencimento do boleto.
+  ///
+  /// O fator de vencimento é um número de quatro dígitos que representa a quantidade
+  /// de dias decorridos desde uma data base até a data de vencimento do boleto.
+  /// Para boletos emitidos antes de 22/02/2025, a data base é 07/10/1997.
+  /// Para boletos emitidos a partir de 22/02/2025, a data base é 22/02/2025.
+  ///
+  /// A posição do fator de vencimento varia conforme o tipo de código e o tipo de boleto.
+  ///
+  /// - [tipoCodigo]: Enumeração que indica se o código é do tipo código de barras ou linha digitável.
+  /// - [tipoBoleto]: Enumeração que indica o tipo de boleto (banco, cartão de crédito, etc.).
+  /// - [codigo]: String que contém o código completo do boleto.
+  ///
+  /// Retorna o fator de vencimento como um inteiro. Se o tipo de boleto não for suportado,
+  /// retorna 0.
+  int obtemFatorData(
+    TipoCodigo tipoCodigo,
+    TipoBoleto? tipoBoleto,
+    String codigo,
+  ) {
     late int fatorData;
-    DateTime dataBoleto = DateTime.utc(1997, 10, 07, 20, 54, 59);
 
     if (tipoCodigo == TipoCodigo.codigoDeBarras) {
       if (tipoBoleto == TipoBoleto.banco ||
@@ -232,9 +296,7 @@ class BoletoUtils {
       }
     }
 
-    dataBoleto = dataBoleto.add(Duration(days: fatorData));
-
-    return dataBoleto;
+    return fatorData;
   }
 
   BoletoValidado validarBoleto(
@@ -300,6 +362,10 @@ class BoletoUtils {
             codigo: codigo,
             tipoCodigo: TipoCodigo.linhaDigitavel,
           ),
+          vencimentoFator2025: identificarData(
+            codigo: codigo,
+            tipoCodigo: TipoCodigo.linhaDigitavel,
+          ),
           valor: identificarValor(codigo),
         ),
         TipoCodigo.codigoDeBarras: BoletoValidado(
@@ -317,6 +383,10 @@ class BoletoUtils {
           vencimento: identificarData(
             codigo: codigo,
             tipoCodigo: TipoCodigo.codigoDeBarras,
+          ),
+          vencimentoFator2025: identificarDataComNovoFator2025(
+            codigo: codigo,
+            tipoCodigo: TipoCodigo.linhaDigitavel,
           ),
           valor: identificarValor(codigo),
         )
