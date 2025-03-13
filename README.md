@@ -11,6 +11,7 @@
 - [x] Identificar tipo de código
 - [x] Identificar valor do boleto
 - [x] Identificar data de vencimento
+- [x] Identificar data de vencimento com base na nova definição do fator de vencimento (22/02/2025)
 - [x] Cálculo digito verificador módulo 10
 - [x] Cálculo digito verificador módulo 11
 ## 2. Métodos
