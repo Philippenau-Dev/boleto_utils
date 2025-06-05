@@ -50,7 +50,7 @@ class BoletoUtils {
         codigo.substring(5, 19) == '00000000000000') {
       return TipoBoleto.cartaoDeCredito;
     } else if (codigo.substring(0, 1) == '8') {
-      if (codigo.substring(1, 1) == '1') {
+      if (codigo.substring(1, 2) == '1') {
         return TipoBoleto.arrecadacaoPrefeitura;
       } else if (codigo.substring(1, 2) == '2') {
         return TipoBoleto.convenioSaneamento;
@@ -216,13 +216,19 @@ class BoletoUtils {
   ///
   /// [Retorna]:
   /// - Uma instância de [DateTime] representando a data de vencimento calculada.
-  DateTime identificarData({
+  DateTime? identificarData({
     required String codigo,
     required TipoCodigo tipoCodigo,
   }) {
     codigo = codigo.numericOnly;
     final DateTime dataBase = DateTime.utc(1997, 10, 07, 00, 00, 00);
     final TipoBoleto? tipoBoleto = identificarTipoBoleto(codigo);
+
+    if (tipoBoleto == TipoBoleto.convenioTelecomunicacao) {
+      /// Para boletos de convenio de telecomunicação, não é possível calcular a data de vencimento.
+      /// A data do vencimento vem impressa no PDF ou JSON/XML de retorno de API bancária.
+      return null;
+    }
 
     final int fatorData = obtemFatorData(tipoCodigo, tipoBoleto, codigo);
 
@@ -529,6 +535,23 @@ class BoletoUtils {
     ///
     ///Requer numeração completa (com ou sem formatação).
     codigo = codigo.numericOnly;
+
+    final tipoBoleto = identificarTipoBoleto(codigo);
+    if (tipoBoleto == TipoBoleto.convenioTelecomunicacao) {
+      final blocos = [
+        codigo.substring(0, 11),
+        codigo.substring(12, 23),
+        codigo.substring(24, 35),
+        codigo.substring(36, 47),
+      ];
+
+      final codigoDeBarras = blocos.join('');
+
+      final valorStr = codigoDeBarras.substring(4, 15);
+      final valor = double.parse(valorStr) / 100;
+      return valor;
+    }
+
     final tipoCodigo = identificarTipoCodigo(codigo);
     if (tipoCodigo == TipoCodigo.codigoDeBarras) {
       codigo = codBarrasParaLinhaDigitavel(barcode: codigo);

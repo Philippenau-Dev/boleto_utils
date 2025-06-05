@@ -1,270 +1,185 @@
+## 📘 Sobre o pacote
 
-
-# Package com métodos úteis para a validação de todos os tipos de boleto
-
-###  1. Recursos
-- [x] Validar boleto
-- [x] Identificar banco emissor do boleto
-- [x] Código de barras para linha digitável
-- [x] Linha digitável para código de barras
-- [x] Identificar tipo de boleto
-- [x] Identificar tipo de código
-- [x] Identificar valor do boleto
-- [x] Identificar data de vencimento
-- [x] Identificar data de vencimento com base na nova definição do fator de vencimento (22/02/2025)
-- [x] Cálculo digito verificador módulo 10
-- [x] Cálculo digito verificador módulo 11
-## 2. Métodos
-Métodos | Definição
---- | ---
-`TipoCodigo identificarTipoCodigo(String codigo)` | Verifica a numeração e retorna o tipo do código inserido. TipoCodigo.codigoDeBarra, TipoCodigo.linhaDigitavel ou TipoCodigo.invalido. Requer numeração completa (com ou sem formatação).
-`TipoBoleto? identificarTipoBoleto(String codigo)` | Verifica a numeração e retorna o tipo do boleto inserido. Se boleto bancário, convênio ou arrecadação. Requer numeração completa (com ou sem formatação).
-`DateTime identificarData({required String codigo, required TipoCodigo tipoCodigo}` | Verifica a numeração, o tipo de código inserido e o tipo de boleto e retorna a data de vencimento. Requer numeração completa (com ou sem formatação) e tipo de código que está sendo inserido (TipoCodigo.codigoDeBarra ou TipoCodigo.linhaDigitavel).
-`DateTime identificarDataComNovoFator2025({required String codigo, required TipoCodigo tipoCodigo}` | Verifica a numeração, o tipo de código inserido e o tipo de boleto e retorna a data de vencimento com base no novo fator de vencimento (22/02/2025). Requer numeração completa (com ou sem formatação) e tipo de código que está sendo inserido (TipoCodigo.codigoDeBarra ou TipoCodigo.linhaDigitavel).
-`double identificarValor(String codigo)` | Verifica a numeração, o tipo de código inserido e o tipo de boleto e retorna o valor do título. Requer numeração completa (com ou sem formatação).
-`String codBarrasParaLinhaDigitavel({required String barcode, bool formatada = false})` | Transforma a numeração no formato de código de barras em linha digitável. Requer numeração completa (com ou sem formatação) e valor `true` ou `false` que representam a forma em que o código convertido será exibido. Com (true) ou sem (false) formatação.
-`String linhaDigitavelParaCodBarras(String codigo)` | Transforma a numeração no formato linha digitável em código de barras. Requer numeração completa (com ou sem formatação).
-`String calculaDVCodBarras({required String codigo,required int posicaoCodigo, required int mod})` | Verifica a numeração do código de barras, extrai o DV (dígito verificador) presente na posição indicada, realiza o cálculo do dígito utilizando o módulo indicado e retorna o dígito verificador. Serve para validar o código de barras. Requer numeração completa (com ou sem formatação), caracteres numéricos que representam a posição do dígito verificador no código de barras e caracteres numéricos que representam o módulo a ser usado (valores aceitos: 10 ou 11).
-`bool validarCodigoComDV({required String codigo, required TipoCodigo tipoCodigo})` | Calcula o dígito verificador de toda a numeração do código de barras. Retorno `true` para numeração válida e `false` para inválida.
-`String calculaMod10(String numero)` | Realiza o cálculo Módulo 10 do número inserido.
-`String calculaMod11(String numero)` | Realiza o cálculo Módulo 11 do número inserido.
-`BoletoValidado validarBoleto(String codigo, {bool formatada = false})` | Verifica a numeração e utiliza várias das funções acima para retornar um BoletoValidado contendo informações sobre a numeração inserida: `Tipo de código inserido`, `Tipo de boleto inserido`, `Código de barras`, `Linha digitável`, `Vencimento` e `Valor`.
-`BancoEmissor identificarBancoEmissor(String codigo)` | Verifica a numeração dos três primeiros digitos e retorna o BancoEmissor com número, nome do banco, ISPB, PDF com lista atualizada diariamente pelo Banco Central.
-
-## 3. Regras de numeração dos boletos
----
-### 4.1 __`BOLETO COBRANÇA`__
->**IMPORTANTE**: As posições aqui mencionadas partem do número 0 e não do 1, a fim de facilitar o entendimento lógico
----
-#### 4.1.1 __TIPO:__ CÓDIGO DE BARRAS (44 POSIÇÕES NUMÉRICAS)
-
-##### __EXEMPLO:__ 11123444455555555556666666666666666666666666
----
-<table>
-    <tr>
-        <td>Bloco</td>
-        <td>Posições</td>
-        <td>Definição</td>
-    </tr>
-    <tr>
-        <td>1</td>
-        <td>0 a 2</td>
-        <td>Código do Banco na Câmara de Compensação</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>3 a 3</td>
-        <td>Código da Moeda = 9 (Real)</td>
-    </tr>
-    <tr>
-        <td>3</td>
-        <td>4 a 4</td>
-        <td>Digito Verificador (DV) do código de Barras</td>
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>5 a 8</td>
-        <td>Fator de Vencimento</td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>9 a 18</td>
-        <td>Valor com 2 casas de centavos</td>
-    </tr>
-    <tr>
-        <td>6</td>
-        <td>19 a 43</td>
-        <td>Campo Livre (De uso da instituição bancária)</td>
-    </tr>
-</table>
+**boleto_utils** é um pacote Dart que fornece utilitários para **validação, leitura e interpretação de boletos** bancários e de arrecadação. Ele facilita a manipulação de códigos de barras e linhas digitáveis, extraindo informações como banco emissor, valor, vencimento e estrutura interna. Ideal para aplicações financeiras, ERPs, gateways de pagamento ou sistemas de automação que precisem interpretar boletos de forma precisa e eficiente.
 
 ---
-#### 4.1.2 __TIPO:__ LINHA DIGITÁVEL (47 POSIÇÕES NUMÉRICAS)
 
-##### __EXEMPLO__: AAABC.CCCCX DDDDD.DDDDDY EEEEE.EEEEEZ K UUUUVVVVVVVVVV
----
+## ✅ Recursos
 
-##### __EXEMPLO:__ 11123444455555555556666666666666666666666666
----
-<table>
-    <tr>
-        <td>Campo</td>
-        <td>Posições linha dig</td>
-        <td>Definição</td>
-    </tr>
-    <tr>
-        <td>A</td>
-        <td>0 a 2 (0 a 2 do cód. barras)</td>
-        <td>Código do Banco na Câmara de compensação</td>
-    </tr>
-    <tr>
-        <td>B</td>
-        <td>3 a 3 (3 a 3 do cód. barras)</td>
-        <td>Código da moeda</td>
-    </tr>
-    <tr>
-        <td>C</td>
-        <td>4 a 8 (19 a 23 do cód. barras)</td>
-        <td>Campo Livre</td>
-    </tr>
-    <tr>
-        <td>X</td>
-        <td>9 a 9</td>
-        <td>Dígito verificador do Bloco 1 (Módulo 10)</td>
-    </tr>
-    <tr>
-        <td>D</td>
-        <td>10 a 19 (24 a 33 do cód. barras)</td>
-        <td>Campo Livre</td>
-    </tr>
-    <tr>
-        <td>Y</td>
-        <td>20 a 20</td>
-        <td>Dígito verificador do Bloco 2 (Módulo 10)</td>
-    </tr>
-    <tr>
-        <td>E</td>
-        <td>21 a 30 (24 a 43 do cód. barras)</td>
-        <td>Campo Livre</td>
-    </tr>
-    <tr>
-        <td>Z</td>
-        <td>31 a 31</td>
-        <td>Dígito verificador do Bloco 3 (Módulo 10)</td>
-    </tr>
-    <tr>
-        <td>K</td>
-        <td>32 a 32 (4 a 4 do cód. barras)</td>
-        <td>Dígito verificador do código de barras</td>
-    </tr>
-    <tr>
-        <td>U</td>
-        <td>33 a 36 (5 a 8 do cód. barras)</td>
-        <td>Fator de Vencimento</td>
-    </tr>
-    <tr>
-        <td>V</td>
-        <td>37 a 43 (9 a 18 do cód. barras)</td>
-        <td>Valor</td>
-    </tr>
-</table>
+- Validar boleto
+- Identificar banco emissor
+- Converter código de barras ⇄ linha digitável
+- Identificar tipo de boleto e tipo de código
+- Obter valor e vencimento (quando aplicável)
+- Cálculo dos dígitos verificadores (Mod10 e Mod11)
+- Compatível com fator de vencimento 2025+
 
 ---
-### 4.2 __`CONTA CONVÊNIO / ARRECADAÇÃO`__
 
-#### 4.2.1 __TIPO:__ CÓDIGO DE BARRAS (44 POSIÇÕES NUMÉRICAS)
----
-##### __EXEMPLO__: 12345555555555566667777777777777777777777777
----
+## 🚀 Métodos disponíveis
 
-<table>
-    <tr>
-        <td>Bloco</td>
-        <td>Posições</td>
-        <td>Definição</td>
-    </tr>
-    <tr>
-        <td>1</td>
-        <td>0 a 0</td>
-        <td>"8" Identificação da Arrecadação/convênio</td>
-    </tr>
-    <tr>
-        <td>2</td>
-        <td>1 a 1</td>
-        <td>Identificação do segmento</td>
-    </tr>
-    <tr>
-        <td>3</td>
-        <td>2 a 2</td>
-        <td>Identificação do valor real ou referência</td>
-    </tr>
-    <tr>
-        <td>4</td>
-        <td>3 a 3</td>
-        <td>Dígito verificador geral (módulo 10 ou 11)</td>
-    </tr>
-    <tr>
-        <td>5</td>
-        <td>4 a 14</td>
-        <td>Valor efetivo ou valor referência</td>
-    </tr>
-    <tr>
-        <td>6</td>
-        <td>15 a 18</td>
-        <td>Identificação da empresa/órgão</td>
-    </tr>
-    <tr>
-        <td>6</td>
-        <td>19 a 43</td>
-        <td>CCampo livre de utilização da empresa/órgão</td>
-    </tr>
-</table>
+| Método                                                | Descrição                                                                                 |
+| ----------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `TipoCodigo identificarTipoCodigo(String codigo)`     | Retorna `TipoCodigo.codigoDeBarra`, `TipoCodigo.linhaDigitavel` ou `TipoCodigo.invalido`. |
+| `TipoBoleto? identificarTipoBoleto(String codigo)`    | Retorna se o boleto é bancário, convênio ou arrecadação.                                  |
+| `DateTime identificarData(...)`                       | Retorna a data de vencimento do boleto (exceto arrecadação).                              |
+| `DateTime identificarDataComNovoFator2025(...)`       | Mesmo que o anterior, com base na nova referência de fator (22/02/2025).                  |
+| `double identificarValor(String codigo)`              | Retorna o valor do boleto (com casas decimais corretas).                                  |
+| `String codBarrasParaLinhaDigitavel(...)`             | Converte código de barras para linha digitável.                                           |
+| `String linhaDigitavelParaCodBarras(String codigo)`   | Converte linha digitável para código de barras.                                           |
+| `String calculaDVCodBarras(...)`                      | Calcula dígito verificador do código de barras usando módulo 10 ou 11.                    |
+| `bool validarCodigoComDV(...)`                        | Retorna se o código informado é válido com base no DV.                                    |
+| `String calculaMod10(String numero)`                  | Cálculo manual de módulo 10.                                                              |
+| `String calculaMod11(String numero)`                  | Cálculo manual de módulo 11.                                                              |
+| `BoletoValidado validarBoleto(...)`                   | Retorna objeto com todos os dados analisados do boleto.                                   |
+| `BancoEmissor identificarBancoEmissor(String codigo)` | Retorna nome, número e ISPB do banco emissor.                                             |
 
 ---
-#### 4.2.2 __TIPO:__ LINHA DIGITÁVEL (48 POSIÇÕES NUMÉRICAS)
----
-##### __EXEMPLO__: ABCDEEEEEEE-W EEEEFFFFGGG-X GGGGGGGGGGG-Y GGGGGGGGGGG-Z
----
-<table>
-    <tr>
-        <td>Campo</td>
-        <td>Posições</td>
-        <td>Definição</td>
-    </tr>
-    <tr>
-        <td>A</td>
-        <td>0 a 0</td>
-        <td>"8" Identificação da Arrecadação/convênio</td>
-    </tr>
-    <tr>
-        <td>B</td>
-        <td>1 a 1</td>
-        <td>Identificação do segmento</td>
-    </tr>
-    <tr>
-        <td>C</td>
-        <td>2 a 2</td>
-        <td>Identificação do valor real ou referência</td>
-    </tr>
-    <tr>
-        <td>D</td>
-        <td>3 a 3</td>
-        <td>Dígito verificador geral (módulo 10 ou 11)</td>
-    </tr>
-    <tr>
-        <td>E</td>
-        <td>1 A 14</td>
-        <td>Valor efetivo ou valor referência</td>
-    </tr>
-    <tr>
-        <td>W</td>
-        <td>11 a 11</td>
-        <td>Dígito verificador do Bloco 1</td>
-    </tr>
-    <tr>
-        <td>F</td>
-        <td>15 a 18</td>
-        <td>Identificação da empresa/órgão</td>
-    </tr>
-    <tr>
-        <td>G</td>
-        <td>19 a 43</td>
-        <td>Campo livre de utilização da empresa/órgão</td>
-    </tr>
-    <tr>
-        <td>X</td>
-        <td>23 a 23</td>
-        <td>Dígito verificador do Bloco 2</td>
-    </tr>
-    <tr>
-        <td>Y</td>
-        <td>35 a 35</td>
-        <td>Dígito verificador do Bloco 3</td>
-    </tr>
-    <tr>
-        <td>Z</td>
-        <td>47 a 47</td>
-        <td>Dígito verificador do Bloco 4</td>
-    </tr>
-</table>
 
+## 🧠 Estrutura dos Boletos
+
+### 🏦 Boleto Bancário
+
+#### Código de Barras (44 dígitos)
+
+| Bloco | Posições | Definição                    |
+| ----- | -------- | ---------------------------- |
+| 1     | 0 a 2    | Código do Banco              |
+| 2     | 3 a 3    | Código da Moeda              |
+| 3     | 4 a 4    | Dígito verificador geral     |
+| 4     | 5 a 8    | Fator de vencimento          |
+| 5     | 9 a 18   | Valor (com 2 casas decimais) |
+| 6     | 19 a 43  | Campo livre                  |
+
+#### Linha Digitável (47 dígitos)
+
+| Campo | Posições | Descrição                            |
+| ----- | -------- | ------------------------------------ |
+| A     | 0 a 2    | Código do banco                      |
+| B     | 3 a 3    | Moeda                                |
+| C     | 4 a 8    | Campo livre                          |
+| X     | 9 a 9    | DV bloco 1                           |
+| D     | 10 a 19  | Campo livre                          |
+| Y     | 20 a 20  | DV bloco 2                           |
+| E     | 21 a 30  | Campo livre                          |
+| Z     | 31 a 31  | DV bloco 3                           |
+| K     | 32 a 32  | DV geral (mesmo do código de barras) |
+| U     | 33 a 36  | Fator de vencimento                  |
+| V     | 37 a 43  | Valor                                |
+
+---
+
+### 🧾 Boleto de Arrecadação / Convênio
+
+> Boletos iniciados com `8` (ex: conta de luz, telecom, água...)
+
+#### Código de Barras (44 dígitos)
+
+| Bloco | Posições | Definição                             |
+| ----- | -------- | ------------------------------------- |
+| 1     | 0 a 0    | "8" - Identificador de arrecadação    |
+| 2     | 1 a 1    | Segmento (veja abaixo)                |
+| 3     | 2 a 2    | Valor real ou referência              |
+| 4     | 3 a 3    | Dígito verificador geral              |
+| 5     | 4 a 14   | Valor (centavos)                      |
+| 6     | 15 a 43  | Campo livre (instituição ou convênio) |
+
+#### Linha Digitável (48 dígitos)
+
+| Campo | Posições | Descrição              |
+| ----- | -------- | ---------------------- |
+| A     | 0 a 0    | "8" Identificação      |
+| B     | 1 a 1    | Segmento               |
+| C     | 2 a 2    | Tipo de valor          |
+| D     | 3 a 3    | DV geral               |
+| E     | 4 a 14   | Valor (centavos)       |
+| F     | 15 a 18  | Identificação do órgão |
+| G     | 19 a 43  | Campo livre            |
+| DV1   | 11 a 11  | DV bloco 1             |
+| DV2   | 23 a 23  | DV bloco 2             |
+| DV3   | 35 a 35  | DV bloco 3             |
+| DV4   | 47 a 47  | DV bloco 4             |
+
+---
+
+### 📚 Segmentos de arrecadação
+
+| Dígito | Segmento               |
+| ------ | ---------------------- |
+| 1      | Arrecadação municipal  |
+| 2      | Saneamento             |
+| 3      | Energia elétrica e gás |
+| 4      | **Telecomunicações**   |
+| 5      | Órgãos governamentais  |
+| 6 / 9  | Outros                 |
+| 7      | Multas de trânsito     |
+
+---
+
+### 💡 Observações importantes
+
+- A **data de vencimento só pode ser lida em boletos bancários** (com fator de vencimento).
+- Boletos de arrecadação **não contêm vencimento codificado** — deve ser extraído manualmente ou de fontes externas.
+- O **valor** em boletos de arrecadação está sempre nas posições 5 a 15 do código de barras e representa **centavos**.
+
+```txt
+Exemplo:
+Código de barras: 84660000001993000481000112208428092308214933
+Valor extraído:   00000119300 → R$ 119,30
+```
+
+---
+
+## 📦 Instalação
+
+```yaml
+dependencies:
+  boleto_utils:
+```
+
+---
+
+## ▶️ Exemplo rápido
+
+```dart
+import 'package:boleto_utils/boleto_utils.dart';
+
+void main() {
+  final codigo = '34191790010104351004791020150008291070000005000';
+
+  final boleto = BoletoUtils();
+  final tipo = boleto.identificarTipoBoleto(codigo);
+  final valor = boleto.identificarValor(codigo);
+  final vencimento = boleto.identificarData(
+    codigo: codigo,
+    tipoCodigo: TipoCodigo.codigoDeBarras,
+  );
+
+  print('Tipo: $tipo');
+  print('Valor: R\$ ${valor.toStringAsFixed(2)}');
+  print('Vencimento: $vencimento');
+}
+```
+
+---
+
+## 👨‍💻 Contribuições
+
+Contribuições são bem-vindas! Relate issues ou envie PRs com melhorias e testes.
+
+---
+
+## 🤝 Contribuindo
+
+Este projeto é open source. Sinta-se à vontade para:
+
+- Reportar bugs
+- Sugerir funcionalidades
+- Enviar pull requests com correções ou melhorias
+- Criar issues com dúvidas ou ideias
+
+---
+
+## 📄 Licença
+
+Distribuído sob a licença MIT. Consulte o arquivo `LICENSE` para mais informações.
