@@ -1,11 +1,11 @@
 name: boleto_utils
 description: Package com métodos para a validação de todos os tipos de boleto do Brasil definidos pela FEBRABAN
-version: 1.1.0
+version: 1.1.1
 homepage: https://github.com/Philippenau-Dev/boleto_utils
 
 environment:
-  sdk: ">=2.19.0 <4.0.0"
-  flutter: ">=3.7.0"
+  sdk: '>=2.19.0 <4.0.0'
+  flutter: '>=3.7.0'
 
 dependencies:
   flutter:
