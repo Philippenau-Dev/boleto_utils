@@ -24,7 +24,8 @@
 | `TipoBoleto? identificarTipoBoleto(String codigo)`    | Retorna se o boleto é bancário, convênio ou arrecadação.                                  |
 | `DateTime identificarData(...)`                       | Retorna a data de vencimento do boleto (exceto arrecadação).                              |
 | `DateTime identificarDataComNovoFator2025(...)`       | Mesmo que o anterior, com base na nova referência de fator (22/02/2025).                  |
-| `double identificarValor(String codigo)`              | Retorna o valor do boleto (com casas decimais corretas).                                  |
+| `double identificarValor(String codigo)`              | Retorna o valor do boleto (cobrança ou arrecadação com valor efetivo).                    |
+| `double identificarValorCodBarrasArrecadacao(...)`   | Retorna o valor de boletos de arrecadação/convênio (água, luz, gás, IPTU, taxas).         |
 | `String codBarrasParaLinhaDigitavel(...)`             | Converte código de barras para linha digitável.                                           |
 | `String linhaDigitavelParaCodBarras(String codigo)`   | Converte linha digitável para código de barras.                                           |
 | `String calculaDVCodBarras(...)`                      | Calcula dígito verificador do código de barras usando módulo 10 ou 11.                    |

@@ -65,11 +65,12 @@ class BoletoUtils {
         return TipoBoleto.outros;
       } else if (codigo.substring(1, 2) == '7') {
         return TipoBoleto.arrecadacaoTaxasDeTransito;
+      } else {
+        return TipoBoleto.outros;
       }
     } else {
       return TipoBoleto.banco;
     }
-    return null;
   }
 
   Referencia? _identificarReferencia(String barcode) {
@@ -368,7 +369,7 @@ class BoletoUtils {
             codigo: codigo,
             tipoCodigo: TipoCodigo.linhaDigitavel,
           ),
-          vencimentoFator2025: identificarData(
+          vencimentoFator2025: identificarDataComNovoFator2025(
             codigo: codigo,
             tipoCodigo: TipoCodigo.linhaDigitavel,
           ),
@@ -392,7 +393,7 @@ class BoletoUtils {
           ),
           vencimentoFator2025: identificarDataComNovoFator2025(
             codigo: codigo,
-            tipoCodigo: TipoCodigo.linhaDigitavel,
+            tipoCodigo: TipoCodigo.codigoDeBarras,
           ),
           valor: identificarValor(codigo),
         )
@@ -484,10 +485,10 @@ class BoletoUtils {
           final dv3 = codigo.substring(35, 36);
           final dv4 = codigo.substring(47, 48);
 
-          final valid = (calculaMod11(bloco1) == dv1 &&
-              calculaMod11(bloco2) == dv2 &&
-              calculaMod11(bloco3) == dv3 &&
-              calculaMod11(bloco4) == dv4);
+          final valid = (calculaMod11(bloco1, isArrecadacao: true) == dv1 &&
+              calculaMod11(bloco2, isArrecadacao: true) == dv2 &&
+              calculaMod11(bloco3, isArrecadacao: true) == dv3 &&
+              calculaMod11(bloco4, isArrecadacao: true) == dv4);
 
           return valid;
         }
@@ -524,6 +525,29 @@ class BoletoUtils {
     return codigo == resultado;
   }
 
+  /// Identifica o valor de um boleto de arrecadação ou convênio a partir do código de barras ou linha digitável.
+  ///
+  /// Requer numeração completa (com ou sem formatação) e o [tipoCodigo] (código de barras ou linha digitável).
+  /// Nos boletos de arrecadação iniciados com '8', quando o 3º dígito for 6 ou 8 (valor efetivo),
+  /// o valor fica posicionado nos dígitos 4 a 15 do código de barras.
+  double identificarValorCodBarrasArrecadacao({
+    required String codigo,
+    required TipoCodigo tipoCodigo,
+  }) {
+    codigo = codigo.numericOnly;
+
+    String barcode = codigo;
+    if (tipoCodigo == TipoCodigo.linhaDigitavel) {
+      barcode = linhaDigitavelParaCodBarras(codigo);
+    }
+
+    if (barcode.length < 44) return 0.0;
+
+    final valorStr = barcode.substring(4, 15);
+    final valor = double.parse(valorStr) / 100;
+    return valor;
+  }
+
   double identificarValor(String codigo) {
     /// Recebe uma string, identifica o tipo de código e retorna o valor do título
     ///
@@ -536,20 +560,17 @@ class BoletoUtils {
     ///Requer numeração completa (com ou sem formatação).
     codigo = codigo.numericOnly;
 
-    final tipoBoleto = identificarTipoBoleto(codigo);
-    if (tipoBoleto == TipoBoleto.convenioTelecomunicacao) {
-      final blocos = [
-        codigo.substring(0, 11),
-        codigo.substring(12, 23),
-        codigo.substring(24, 35),
-        codigo.substring(36, 47),
-      ];
-
-      final codigoDeBarras = blocos.join('');
-
-      final valorStr = codigoDeBarras.substring(4, 15);
-      final valor = double.parse(valorStr) / 100;
-      return valor;
+    if (codigo.startsWith('8')) {
+      final ref = _identificarReferencia(codigo);
+      if (ref != null && ref.efetivo) {
+        final tipoCodigo = identificarTipoCodigo(codigo);
+        return identificarValorCodBarrasArrecadacao(
+          codigo: codigo,
+          tipoCodigo: tipoCodigo,
+        );
+      } else {
+        return 0.0;
+      }
     }
 
     final tipoCodigo = identificarTipoCodigo(codigo);
@@ -614,7 +635,7 @@ class BoletoUtils {
     return soma.toString();
   }
 
-  String calculaMod11(String numero) {
+  String calculaMod11(String numero, {bool isArrecadacao = false}) {
     ///	Realiza o cálculo Módulo 11 do número inserido.
     final numeroReverso = numero.split('').reversed.join();
 
@@ -635,11 +656,9 @@ class BoletoUtils {
     }
     digito = soma % 11;
 
-    if (digito < 2) {
-      digito = 0;
-    } else if (digito == 10) {
-      digito = 1;
-    } else if (digito >= 2) {
+    if (digito < 2 || digito == 10) {
+      digito = isArrecadacao ? 0 : 1;
+    } else {
       digito = 11 - digito;
     }
 

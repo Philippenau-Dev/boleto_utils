@@ -47,6 +47,7 @@ class _HomeState extends State<Home> {
       (barcode) async {
         if (barcode.length == 44) {
           boletoValidado = boletoUtils.validarBoleto(barcode);
+          if (!context.mounted) return;
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => InfosBoleto(boletoValidado),

@@ -1,5 +1,3 @@
-library boleto_utils;
-
 export 'src/boleto.dart';
 export 'src/types/tipo_codigo.dart';
 export 'src/types/tipo_boleto.dart';

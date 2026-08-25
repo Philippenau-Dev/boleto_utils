@@ -1,3 +1,10 @@
+## 1.2.0
+
+- Atualizadas dependências e suporte SDK Dart `>=3.0.0 <4.0.0` e Flutter `>=3.10.0` (`flutter_lints` `^5.0.0`)
+- Adicionado método `identificarValorCodBarrasArrecadacao()` e expandido `identificarValor()` para todos os boletos de Arrecadação/Convênios (Água, Luz, Gás, IPTU, Taxas) com valor efetivo
+- Fix do retorno de `vencimentoFator2025` no método `validarBoleto()` para Linha Digitável e Código de Barras
+- Ajustado cálculo do `calculaMod11()` com parâmetro `isArrecadacao` para retornar `0` em arrecadação e `1` em cobrança bancária quando o resto for `< 2` ou `== 10`
+
 ## 1.1.1
 
 - Fix bug no método de identificador de tipo de boleto
